@@ -14,12 +14,39 @@ const api = axios.create({
 
 // Add interceptor to add token to requests
 api.interceptors.request.use((config) => {
+  // Don't add token for login and register endpoints
+  if (config.url && ['/users/login', '/users/register'].includes(config.url)) {
+    return config;
+  }
+
   const token = Cookies.get('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    // Redirect to login if token is missing (except for public routes)
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
   }
   return config;
+}, (error) => {
+  return Promise.reject(error);
 });
+
+// Add response interceptor to handle 401 Unauthorized
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Clear token and redirect to login
+      Cookies.remove('token');
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 interface PlanData {
   destination: string;
@@ -49,11 +76,19 @@ interface TravelPlan {
   };
 }
 
+interface UpdateProfileData {
+  nickname?: string;
+  currentPassword?: string;
+  newPassword?: string;
+}
+
 // Authentication APIs
 export const login = async (email: string, password: string) => {
   try {
     const response = await api.post('/users/login', { email, password });
-    Cookies.set('token', response.data.access_token);
+    if (response.data.access_token) {
+      Cookies.set('token', response.data.access_token);
+    }
     return response.data;
   } catch (error) {
     throw error;
@@ -77,6 +112,15 @@ export const register = async (userData: {
 export const getUserProfile = async () => {
   try {
     const response = await api.get('/users/profile');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateProfile = async (data: UpdateProfileData) => {
+  try {
+    const response = await api.put('/users/profile', data);
     return response.data;
   } catch (error) {
     throw error;
