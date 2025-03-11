@@ -51,6 +51,12 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link
+              href="/travel"
+              className={`nav-link ${pathname === '/travel' ? 'text-blue-600' : 'text-gray-600'}`}
+            >
+              Travel Plans
+            </Link>
+            <Link
               href="/planner"
               className={`nav-link ${pathname === '/planner' ? 'text-blue-600' : 'text-gray-600'}`}
             >
