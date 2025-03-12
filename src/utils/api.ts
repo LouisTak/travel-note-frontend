@@ -15,7 +15,7 @@ const api = axios.create({
 // Add interceptor to add token to requests
 api.interceptors.request.use((config) => {
   // Don't add token for login and register endpoints
-  if (config.url && ['/users/login', '/users/register'].includes(config.url)) {
+  if (config.url && ['/login', '/users/register'].includes(config.url)) {
     return config;
   }
 
@@ -273,7 +273,7 @@ export const getTravelSuggestions = async (data: {
 };
 
 export const isAuthenticated = () => {
-  return !!Cookies.get('token');
+  return Cookies.get('token') ? true : false;
 };
 
 export const logout = () => {
