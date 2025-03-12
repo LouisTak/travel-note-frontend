@@ -64,6 +64,7 @@ export default function TravelDetail() {
       }
 
       const data = await response.data;
+      data.duration = calculateDuration(data.start_at, data.end_at);
       setTravel(data);
       if (data.itineraries && data.itineraries.length > 0) {
         setActiveDay(data.itineraries[0].day_number);
@@ -74,6 +75,14 @@ export default function TravelDetail() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const calculateDuration = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
   };
 
   const formatDate = (dateString: string) => {
