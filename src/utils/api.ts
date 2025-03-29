@@ -2,13 +2,14 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 // Base API URL
-const API_URL = 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Create axios instance
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    "Accept": "application/json"
   },
 });
 
@@ -179,7 +180,7 @@ interface UpdateProfileData {
 // Authentication APIs
 export const login = async (email: string, password: string) => {
   try {
-    const response = await api.post('/login', { email, password });
+    const response = await api.post('/login', { email, password })
     if (response.data.access_token) {
       Cookies.set('token', response.data.access_token);
       if (response.data.refresh_token) {
@@ -279,6 +280,15 @@ export const isAuthenticated = () => {
 export const logout = () => {
   Cookies.remove('token');
   Cookies.remove('refresh_token');
+};
+
+export const healthCheck = async () => {
+  try {
+    const response = await api.get('/api/v1/health-check');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export default api; 
