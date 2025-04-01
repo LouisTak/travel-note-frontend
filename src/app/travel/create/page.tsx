@@ -60,8 +60,8 @@ export default function CreateTravel() {
     try {
       const response = await api.post('/travel-plans', {
         ...data,
-        start_at: data.start_at.toISOString(),
-        end_at: data.end_at.toISOString()
+        start_at: new Date(Date.UTC(data.start_at.getFullYear(), data.start_at.getMonth(), data.start_at.getDate())),
+        end_at: new Date(Date.UTC(data.end_at.getFullYear(), data.end_at.getMonth(), data.end_at.getDate()))
       });
 
       if (response.status !== 201 && response.status !== 200) {
@@ -69,7 +69,7 @@ export default function CreateTravel() {
         throw new Error(errorData.error || 'Failed to create travel plan');
       }
 
-      const result = await response.data;
+      const result = await response.data.data;
       toast.success('Travel plan created successfully!');
       router.push(`/travel/${result.id}`);
     } catch (error) {

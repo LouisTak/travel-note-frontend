@@ -60,9 +60,8 @@ api.interceptors.response.use(
 
     // If the error is 401 and it's not a refresh token request and we haven't tried to refresh yet
     if (error.response &&
-      error.response.status === 401 &&
+      error.response.status === 403 &&
       error.response.data &&
-      error.response.data.msg === 'Token has expired' &&
       !originalRequest._retry) {
 
       if (isRefreshing) {
@@ -89,21 +88,21 @@ api.interceptors.response.use(
           throw new Error('No refresh token available');
         }
 
-        const response = await axios.post(`${API_URL}/refresh`, {}, {
+        const response = await axios.post(`${API_URL}/refresh-token`, {}, {
           headers: {
             'Authorization': `Bearer ${refreshToken}`
           }
         });
 
-        if (response.data.access_token) {
+        if (response.data.data.access_token) {
           // Update tokens
-          Cookies.set('token', response.data.access_token);
+          Cookies.set('token', response.data.data.access_token);
 
           // Update Authorization header for original request
-          originalRequest.headers['Authorization'] = `Bearer ${response.data.access_token}`;
+          originalRequest.headers['Authorization'] = `Bearer ${response.data.data.access_token}`;
 
           // Process any queued requests
-          processQueue(null, response.data.access_token);
+          processQueue(null, response.data.data.access_token);
 
           // Retry the original request
           return api(originalRequest);
@@ -129,7 +128,7 @@ api.interceptors.response.use(
     }
 
     // For other errors or if token refresh failed
-    if (error.response && error.response.status === 401) {
+    if (error.response && error.response.status === 403) {
       // Clear token and redirect to login
       Cookies.remove('token');
       Cookies.remove('refresh_token');
@@ -261,7 +260,7 @@ export const generateTravelPlan = async (planData: PlanData): Promise<TravelPlan
       duration: Number(planData.duration)
     };
 
-    const response = await api.post('/ai/plan', data);
+    const response = await api.post('/plan', data);
 
     // Validate response structure
     if (!response.data || !response.data.destination || !response.data.plan) {
@@ -280,7 +279,7 @@ export const getTravelSuggestions = async (data: {
   query: string;
 }) => {
   try {
-    const response = await api.post('/ai/suggestions', data);
+    const response = await api.post('/suggest', data);
     return response.data;
   } catch (error) {
     throw error;

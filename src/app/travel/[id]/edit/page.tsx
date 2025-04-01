@@ -81,7 +81,7 @@ export default function EditTravel() {
           throw new Error('Failed to fetch travel plan');
         }
 
-        const data = await response.data;
+        const data = await response.data.data;
         
         // Format dates
         const formattedData = {

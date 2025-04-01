@@ -63,7 +63,7 @@ export default function TravelDetail() {
         throw new Error('Failed to fetch travel plan');
       }
 
-      const data = await response.data;
+      const data = await response.data.data;
       data.duration = calculateDuration(data.start_at, data.end_at);
       setTravel(data);
       if (data.itineraries && data.itineraries.length > 0) {
