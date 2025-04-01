@@ -43,10 +43,10 @@ export default function TravelList() {
 
   useEffect(() => {
     setMounted(true);
-    if (!isAuthenticated()) {
-      router.push("/login");
-      return;
-    }
+    // if (!isAuthenticated()) {
+    //   router.push("/login");
+    //   return;
+    // }
 
     fetchTravels();
   }, [router]);
@@ -55,8 +55,8 @@ export default function TravelList() {
     try {
       const response = await api.get('/travel-plans');
 
-      const data = await response.data;
-      setTravels(data);
+      const travels = await response.data.data;
+      setTravels(travels);
     } catch (error) {
       toast.error('Failed to load travel plans');
       console.error('Error loading travel plans:', error);

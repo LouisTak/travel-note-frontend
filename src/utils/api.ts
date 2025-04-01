@@ -177,6 +177,11 @@ interface UpdateProfileData {
   newPassword?: string;
 }
 
+interface ChangePasswordData {
+  old_password: string;
+  new_password: string;
+}
+
 // Authentication APIs
 export const login = async (email: string, password: string) => {
   try {
@@ -220,9 +225,18 @@ export const register = async (userData: {
   }
 };
 
-export const getUserProfile = async () => {
+export const getMe = async () => {
   try {
-    const response = await api.get('/users/profile');
+    const response = await api.get('/me');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const changePassword = async (data: ChangePasswordData) => {
+  try {
+    const response = await api.put('/change-password', data);
     return response.data;
   } catch (error) {
     throw error;

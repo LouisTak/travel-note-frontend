@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getUserProfile, isAuthenticated } from '@/utils/api';
+import { getMe, isAuthenticated } from '@/utils/api';
 import { toast } from 'react-toastify';
 import Navbar from '@/components/Navbar';
 
@@ -29,7 +29,7 @@ export default function Profile() {
 
     const fetchProfile = async () => {
       try {
-        const data = await getUserProfile();
+        const data = await getMe();
         setProfile(data);
       } catch (error) {
         toast.error('Failed to load profile');

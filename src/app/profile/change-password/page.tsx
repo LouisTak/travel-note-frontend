@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { updateProfile, isAuthenticated } from '@/utils/api';
+import { changePassword, isAuthenticated } from '@/utils/api';
 import { toast } from 'react-toastify';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
@@ -41,9 +41,9 @@ export default function ChangePassword() {
 
     setUpdateLoading(true);
     try {
-      await updateProfile({
-        currentPassword: data.currentPassword,
-        newPassword: data.newPassword
+      await changePassword({
+        old_password: data.currentPassword,
+        new_password: data.newPassword
       });
       toast.success('Password updated successfully');
       router.push('/profile');
