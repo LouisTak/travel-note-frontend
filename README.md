@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Travel Planner Frontend
+
+A modern travel planning application built with Next.js that helps users create personalized travel itineraries, manage travel plans, and get local insights for their next adventure—all powered by artificial intelligence.
+
+![Travel Planner Screenshot](public/screenshot.png)
+
+## Features
+
+- **AI-Powered Itineraries**: Generate personalized day-by-day travel plans based on destination and interests
+- **Travel Management**: Create, view, edit, and delete travel plans
+- **Itinerary Management**: Add detailed itineraries with checkpoints to your travel plans
+- **User Authentication**: Secure login/register system with HTTP-only cookies
+- **Responsive Design**: Built with Tailwind CSS for a beautiful experience on all devices
+- **Modern UI**: Intuitive interface with loading states, toasts for notifications, and more
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Form Handling**: React Hook Form
+- **HTTP Client**: Axios
+- **Date Handling**: date-fns and React DatePicker
+- **Authentication**: HTTP-only cookies
+- **Notifications**: React Toastify
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+ and npm/yarn
+- Backend API running (see Backend Repository)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/travel-planner-frontend.git
+   cd travel-planner-frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   yarn install
+   ```
+
+3. Create a `.env.local` file in the root directory:
+   ```
+   NEXT_PUBLIC_API_URL=http://localhost:8000/api
+   ```
+
+4. Start the development server:
+   ```bash
+   yarn dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_API_URL` | URL for the backend API | http://localhost:8000/api |
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── login/              # Authentication pages
+│   ├── travel/             # Travel plan pages
+│   │   ├── [id]/           # Travel plan details
+│   │   │   ├── itineraries/  # Itinerary management
+│   │   │   └── edit/       # Edit travel plan
+│   │   └── create/         # Create new travel plan
+├── components/             # Reusable UI components
+└── utils/                  # Utility functions and API clients
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `yarn dev` - Start the development server
+- `yarn build` - Build the application for production
+- `yarn start` - Start the production server
+- `yarn lint` - Run ESLint
+- `yarn rebuild` - Clean cache and rebuild the application
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Authentication Flow
 
-## Learn More
+The application uses HTTP-only cookies for authentication:
 
-To learn more about Next.js, take a look at the following resources:
+1. User logs in with email/password
+2. Backend sets HTTP-only cookies (access token and refresh token)
+3. Cookies are automatically sent with subsequent requests
+4. Token refresh is handled automatically when needed
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Feel free to submit issues and pull requests. For major changes, please open an issue first to discuss what you would like to change.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License - see the LICENSE file for details.
